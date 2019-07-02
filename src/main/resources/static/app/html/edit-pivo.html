@@ -1,0 +1,45 @@
+<div ng-controller="editPivoCtrl">
+	
+	<!-- FORM FOR EDITING EXISTING BEER -->
+	<form  id="form3" name="form3" >
+		
+		<h2>Izmena piva</h2>
+		<hr>
+	
+		<div class="form-group">
+			<label for="nazivE">Naziv</label>
+			<input ng-model="formEdit.naziv" id="nazivE" name="nazivE" class="form-control"  />
+		</div>
+		
+		<div class="form-group">
+			<label for="vrstaE">Vrsta</label>
+			<input ng-model="formEdit.vrsta" id="vrstaE" name="vrstaE" class="form-control" />
+		</div>
+		
+		<div class="form-group">
+			<label for="procenatAlkoholaE">Procenat alkohola</label>
+			<input ng-model="formEdit.procenatAlkohola" id="procenatAlkoholaE" name="procenatAlkoholaE" class="form-control" />
+		</div>
+		
+		<div class="form-group">
+			<label for="ibuE">IBU</label>
+			<input ng-model="formEdit.ibu" id="ibuA" name="ibuA" class="form-control" />
+		</div>
+		
+		<div class="form-group">
+			<label for="kolicinaStanjeE">Količna na stanju</label>
+			<input ng-model="formEdit.kolicinaStanje" id="kolicinaStanjeE" name="kolicinaStanjeE" class="form-control" />
+		</div>
+		
+		<div class="form-group">
+			<label for="pivaraE">Pivara</label>
+                <select ng-model="formEdit.pivaraId" class="form-control" name="pivaraE" id="pivaraE" >
+                  	<option disabled value="">---</option>
+                    <option ng-repeat="pivara in pivare" value="{{pivara.id}}" ng-selected="formEdit.pivaraId==pivara.id">{{pivara.naziv}}</option>
+                </select>
+		</div>
+		
+		<button ng-click="izmeni()" class="btn btn-success">Izmeni</button>	
+		
+	</form>
+</div>

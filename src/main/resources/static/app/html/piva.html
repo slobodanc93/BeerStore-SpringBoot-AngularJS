@@ -1,0 +1,149 @@
+<div ng-controller="pivaCtrl">
+	
+<!-- FORMS -->
+<div class="row">
+	
+	<!-- FORM FOR ADDING NEW BEER -->
+	<form class="col-md-5" id="form1" name="form1">
+		
+		<h2>Dodavanje piva</h2>
+		<hr>
+	
+		<div class="form-group">
+			<label for="nazivA">Naziv</label>
+			<input ng-model="formAdd.naziv" id="nazivA" name="nazivA" class="form-control"  />
+		</div>
+		
+		<div class="form-group">
+			<label for="vrstaA">Vrsta</label>
+			<input ng-model="formAdd.vrsta" id="vrstaA" name="vrstaA" class="form-control" />
+		</div>
+		
+		<div class="form-group">
+			<label for="procenatAlkoholaA">Procenat alkohola</label>
+			<input ng-model="formAdd.procenatAlkohola" id="procenatAlkoholaA" name="procenatAlkoholaA" class="form-control" />
+		</div>
+		
+		<div class="form-group">
+			<label for="ibuA">IBU</label>
+			<input ng-model="formAdd.ibu" id="ibuA" name="ibuA" class="form-control" />
+		</div>
+		
+		<div class="form-group">
+			<label for="kolicinaStanjeA">Količina na stanju</label>
+			<input ng-model="formAdd.kolicinaStanje" id="kolicinaStanjeA" name="kolicinaStanjeA" class="form-control" />
+		</div>
+		
+		<div class="form-group">
+			<label for="pivaraA">Pivara</label>
+                <select ng-model="formAdd.pivaraId" class="form-control" name="pivaraA" id="pivaraA" >
+                  	<option disabled value="">---</option>
+                    <option ng-repeat="pivara in pivare" value="{{pivara.id}}" ng-selected="formAdd.pivaraId==pivara.id">{{pivara.naziv}}</option>
+                </select>
+		</div>
+		
+		<button ng-click="add()" ng-if="!showIzmeniButton" class="btn btn-success">Dodaj</button>	
+		<button ng-click="izmeni()" ng-if="showIzmeniButton" class="btn btn-success">Izmeni</button>	
+		
+	</form>
+	
+	<div class="col-md-2"></div>	
+	
+	<!-- FORM FOR SEARCHING LISTED BEERS -->
+	<form class="col-md-5">
+	
+		<h2>Pretraga piva</h2>
+		<hr>
+	
+		<div class="form-group">
+			<label for="nazivPivaS">Naziv</label>
+			<input ng-model="formSearch.nazivPiva" id="nazivPivaS" name="nazivPivaS" class="form-control" />
+		</div>
+		
+		<div class="form-group">
+			<label for="minIbuS">Minimalni IBU</label>
+			<input ng-model="formSearch.minIbu" id="minIbuS" name="minIbuS" class="form-control" />
+		</div>
+		
+		<div class="form-group">
+			<label for="maxIbuS">MaksimalniIBU</label>
+			<input ng-model="formSearch.maxIbu" id="maxIbuS" name="maxIbuS" class="form-control" />
+		</div>
+		
+		<div class="form-group">
+			<label for="nazivPivareS">Naziv pivare</label>
+			<input ng-model="formSearch.nazivPivare"  id="nazivPivareS" name="nazivPivareS" class="form-control" />
+		</div>
+		
+		
+		<button ng-click="search()" type="button" class="btn btn-primary">Traži</button>
+		<button ng-click="resetSearch()" type="button" class="btn btn-danger">Poništi pretragu</button>
+	
+	</form>
+
+</div>
+<br>
+
+
+<!-- TABLE NAVIGATION -->
+<div class="btn-group pull-right">
+	<button class="btn btn-outline-secondary" ng-click="nazad()" ng-disabled="pageNum == 0">Prethodna</button>
+	<button class="btn btn-outline-secondary" ng-click="napred()" ng-disabled="pageNum == totalPages-1">Sledeća</button>
+</div>
+
+<div class="btn-group pull-left">
+	<button class="btn btn-outline-danger" ng-click="nestalo()">Nestalo</button>
+	<button class="btn btn-outline-info" ng-click="resetNestalo()">Poništi</button>
+</div>
+<br><br>
+
+<!-- TABLE CONTENT -->	
+<div class="table-responsive">
+<table class="table table-striped">
+	<thead class="thead thead-dark">
+		<tr>
+			<th>Naziv</th>
+			<th>Vrsta</th>
+			<th>Procenat alkohola</th>
+			<th>IBU</th>
+			<th>Količina na stanju</th>
+			<th>Pivara</th>
+			<th>Akcije</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="p in piva">
+			<td>{{p.naziv}}</td>
+			<td>{{p.vrsta}}</td>
+			<td>{{p.procenatAlkohola}}</td>
+			<td>{{p.ibu}}</td>
+			<td>{{p.kolicinaStanje}}</td>
+			<td>{{p.pivaraNaziv}}</td>
+			<td>
+				<button ng-click="delete(p.id)" class="btn btn-danger">Obriši</button>
+				<button ng-click="editMainPage(p.id)" class="btn btn-warning">Izmeni</button>
+				<button ng-click="kupi(p.id)" ng-disabled="p.kolicinaStanje == 0" class="btn btn-info">Kupi</button>
+			</td>
+		</tr>
+	</tbody>
+</table>
+</div>
+
+<!-- ALERTS -->
+<div style="position:fixed; top:80px; right: 20px; width: 300px" ng-if="showDangerAlert" class="alert alert-danger alert-dismissible fade show" role="alert">
+	<i class="fa fa-exclamation-triangle fa-3x" aria-hidden="true" style="width: 30%; float: left; margin-top: 15px"></i>
+ 	<label style="width: 70%; float: left"> {{ alertMessage }} </label>
+  	<button type="button" class="close" ng-click="close()" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+<div style="position:fixed; top:80px; right: 20px; width: 300px" ng-if="showSuccessAlert" class="alert alert-success alert-dismissible fade show" role="alert">
+ 	<i class="fa fa-check fa-3x" aria-hidden="true" style="width: 30%; float: left; margin-top: 8px"></i>
+ 	<label style="width: 70%; float: left"> {{ alertMessage }} </label>
+  	<button type="button" class="close" ng-click="close()" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+    </button>
+</div>	
+
+</div>
