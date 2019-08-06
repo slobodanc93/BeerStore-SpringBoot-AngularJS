@@ -17,4 +17,4 @@ Frontend: AngularJS
 4. Pokrenuti projekat
 
 # Screenshots
-![](screenshoots/Screenshot_main.png)
+![](screenshots/Screenshot_main.png)
